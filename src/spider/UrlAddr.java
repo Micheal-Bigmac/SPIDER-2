@@ -2,6 +2,7 @@ package spider;
 
 public class UrlAddr {
 
-	public static String []parseUrl={"http://zhidao.baidu.com/prof/view/888261962","http://zhidao.baidu.com/prof/view/%E7%BD%97lili"};
-	public static String targetUrl="http://zhidao.baidu.com/prof/view/[^#].";
+	public static String []parseUrl={"http://xiubinyang.haodf.com","http://www.haodf.com/jibing/fengshixingxinzangbing/daifu.htm"};
+	public static String targetUrl=".*(\\.haodf.com)";
+//	public static String targetUrl2="*.haodf.com";
 }

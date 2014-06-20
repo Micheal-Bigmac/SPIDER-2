@@ -6,7 +6,7 @@ public class Crawler {
 	private void initCrawlerWithSeeds(String[] seeds)
 	{
 		for(int i=0;i<seeds.length;i++)
-			LinkDB.addUnvisitedUrl(seeds[i]);
+			Link.addUnvisitedUrl(seeds[i]);
 	}
 	
 	/* 爬取方法*/
@@ -24,26 +24,23 @@ public class Crawler {
 		//初始化 URL 队列
 		initCrawlerWithSeeds(seeds);
 		//循环条件：待抓取的链接不空且抓取的网页不多于 1000
-		while(!LinkDB.unVisitedUrlsEmpty()&&LinkDB.getVisitedUrlNum()<=1000)
+		while(!Link.unVisitedUrlsEmpty()&&Link.getVisitedUrlNum()<=1000)
 		{
 			//队头 URL 出对
-			String visitUrl=LinkDB.unVisitedUrlDeQueue();
+			String visitUrl=Link.unVisitedUrlDeQueue();
 			if(visitUrl==null)
 				continue;
-			FileDownLoader downLoader=new FileDownLoader();
-			//下载网页
-			System.out.println(" Crawler "+visitUrl);
-			downLoader.downloadFile(visitUrl);
+			
 			//该 url 放入到已访问的 URL 中
-			LinkDB.addVisitedUrl(visitUrl);
-			//提取出下载网页中的 URL
+			Link.addVisitedUrl(visitUrl);
+			
 			
 //			Set<String> links=HtmlParserTool.extracLinks(visitUrl,filter);
-			Set<String> links=HtmlParserTool.extracLinks(visitUrl);
+			Set<String> links=HtmlParserTool.extracLinks(visitUrl); 
 			//新的未访问的 URL 入队
 			for(String link:links)
 			{
-					LinkDB.addUnvisitedUrl(link);
+					Link.addUnvisitedUrl(link);
 			}
 		}
 	}

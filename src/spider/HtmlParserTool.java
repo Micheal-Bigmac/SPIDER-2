@@ -13,10 +13,11 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 public class HtmlParserTool {
+	static	Set<String> links = new HashSet<String>();
+	
 	// 获取一个网站上的链接,filter 用来过滤链接
 	public static Set<String> extracLinks(String url) {
-
-		Set<String> links = new HashSet<String>();
+		
 		try {
 			Parser parser = new Parser(url);
 			parser.setEncoding("gb2312");
@@ -41,10 +42,8 @@ public class HtmlParserTool {
 					LinkTag link = (LinkTag) tag;
 					String linkUrl = link.getLink();// url
 //					System.out.println(" HtmlParserTool  "+linkUrl);
-					if(linkUrl.matches(UrlAddr.targetUrl)){
-						System.out.println("==============");
-						links.add(linkUrl);
-					}
+					modify(linkUrl);
+					links.add(linkUrl);
 					/*if (filter.accept(linkUrl)){
 						System.out.println(linkUrl);
 						links.add(linkUrl);
@@ -59,10 +58,11 @@ public class HtmlParserTool {
 					if (end == -1)
 						end = frame.indexOf(">");
 					String frameUrl = frame.substring(5, end - 1);
-					if(frameUrl.matches(UrlAddr.targetUrl)){
+					modify(frameUrl);
+					/*if(frameUrl.matches(UrlAddr.targetUrl)){
 						System.out.println("==============");
 						links.add(frameUrl);
-					}
+					}*/
 					/*if (filter.accept(frameUrl))
 						links.add(frameUrl);*/
 				}
@@ -72,6 +72,22 @@ public class HtmlParserTool {
 		}
 		return links;
 	}
+	//提取出下载网页中的 URL
+	private static void modify(String linkUrl) {
+		if(linkUrl.matches(UrlAddr.targetUrl)&& !Link.isContain(linkUrl)){
+			Link.enDownload(linkUrl);
+			FileDownLoader downLoader=new FileDownLoader();
+			//下载网页
+//						System.out.println(" Crawler "+visitUrl);
+			downLoader.downloadFile(linkUrl);
+			System.out.println("==============");
+		}
+	}
+
+	public Set<String> getLinks() {
+		return links;
+	}
+
 
 	// 测试的 main 方法
 	/*public static void main(String[] args) {
